@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<div *ngIf="productAdded.length === 0" class="empty-cart-message">No Product Added</div>
+<div *ngIf="productAdded.length > 0" class=" cart-container">
+    <div class="cart-item-details">
+        <div class="cart-item" *ngFor="let product of productAdded">
+            <img class="img" src={{product.url}}>
+            <div>
+                <strong>{{product.name}} </strong> <br />
+                <span>{{product.price |currency}}</span> <br />
+                <label>Amount</label>
+                <input class="number-input" type="number" value="{{product.qty}}" min="0" [(ngModel)]="product.qty">
+                <br /><br />
+                <button (click)="removeitem(product)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+
+            </div>
+        </div>
+        <strong>Total: {{loadCartItems()}} </strong>
+    </div>
+    <div class="cart-panel">
+        <form #form="ngForm" (ngSubmit)="onSubmit()">
+            <label>Full name</label><br />
+            <input type="text" name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel"
+                placeholder="(minimum 3 characters)" required minlength="3"><br />
+            <label>Address</label><br />
+            <input type="text" name="address" [(ngModel)]="model.address" #address="ngModel"
+                placeholder="(minimum 6 characters)" required minlength="6"><br />
+            <label>Credit card number</label><br />
+            <input type="text" name="credit" [(ngModel)]="model.credit" #credit="ngModel"
+                placeholder=" (16-digit number) " pattern="^[0-9]{16}$"><br />
+
+            <span>we'll never share your payment details with anyone else</span><br>
+
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Submit</button>
+        </form>
+        <div class="empty-cart-message">
+            <div *ngIf="fullname?.errors?.['minlength']">
+                fullname must be at least 3 characters long.
+            </div>
+            <div *ngIf="address?.errors?.['minlength']">
+                address must be at least 6 characters long.
+            </div>
+            <div *ngIf="credit?.errors?.['pattern']">
+                (credit must be 16 digit long)
+            </div>
+        </div>
+    </div>
+</div>
+
